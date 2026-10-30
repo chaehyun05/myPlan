@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Plan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="app-header">
+      <h1>My Plan</h1>
+      <p class="subtitle">요일, 시간, 할 일을 입력하면 주간 계획표가 만들어져요.</p>
+    </header>
+
+    <!-- 입력 폼 -->
+    <section class="card">
+      <h2 id="form-title">할 일 추가</h2>
+      <form id="plan-form" autocomplete="off">
+        <label class="field">
+          <span class="label">할 일</span>
+          <input type="text" id="task" maxlength="40" placeholder="예: 전공 수업">
+        </label>
+
+        <div class="label-row when-row">
+          <span class="label">언제 <small>요일마다 시간이 다르면 '시간 추가'로 더 넣을 수 있어요</small></span>
+          <div class="mode-toggle">
+            <label><input type="radio" name="mode" value="end" checked> 종료 시간</label>
+            <label><input type="radio" name="mode" value="duration"> 유지 시간</label>
+          </div>
+        </div>
+        <div class="slots" id="slots"></div>
+        <button type="button" class="add-slot" id="add-slot">+ 시간 추가</button>
+
+        <div class="preview" id="preview"></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary" id="submit-btn">추가하기</button>
+          <button type="button" class="btn hidden" id="cancel-edit">수정 취소</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 계획표 -->
+    <section class="card">
+      <div class="table-header">
+        <h2>내 계획표</h2>
+        <div class="actions">
+          <button class="btn" id="save-png">이미지 저장</button>
+          <button class="btn" id="save-pdf">PDF 저장</button>
+          <button class="btn" id="backup">백업 파일 저장</button>
+          <button class="btn" id="restore">불러오기</button>
+          <button class="btn danger" id="clear-all">전체 삭제</button>
+          <input type="file" id="restore-file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+
+      <div class="sheet-wrap" id="sheet-wrap">
+        <div class="sheet" id="sheet">
+          <div class="sheet-inner">
+            <aside class="side">
+              <label class="month-big">
+                <input id="month" maxlength="2" inputmode="numeric" aria-label="월">
+                <span class="month-unit">월</span>
+              </label>
+              <h3 class="sheet-title">주간 계획</h3>
+            </aside>
+            <div class="grid" id="grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 할 일 목록 (저장할 때 2번째 장) -->
+    <section class="card">
+      <div class="table-header">
+        <h2>할 일 목록</h2>
+        <form class="todo-add" id="todo-form" autocomplete="off">
+          <input type="text" id="todo-input" maxlength="60" placeholder="할 일을 입력하고 Enter" aria-label="새 할 일">
+          <button type="submit" class="btn primary">추가</button>
+        </form>
+      </div>
+      <div class="sheet-wrap">
+        <div class="sheet" id="todo-sheet">
+          <div class="sheet-inner">
+            <aside class="side">
+              <div class="month-big"><span class="month-value js-month"></span><span class="month-unit">월</span></div>
+              <h3 class="sheet-title">할 일</h3>
+              <p class="side-sub" id="todo-progress"></p>
+            </aside>
+            <div class="todo-list" id="todo-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 만다라트 (하나 추가할 때마다 저장할 때 한 장씩 늘어남) -->
+    <section class="card">
+      <div class="table-header">
+        <h2>만다라트</h2>
+        <button type="button" class="btn primary" id="add-mandal">+ 만다라트 추가</button>
+      </div>
+      <p class="empty-note" id="mandal-empty">만다라트를 추가하면 저장할 때 한 장씩 같이 저장돼요.</p>
+      <div id="mandal-list"></div>
+    </section>
+  </main>
+
+  <!-- 팝업 -->
+  <div class="modal-backdrop hidden" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+      <div class="modal-buttons" id="modal-buttons"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- 이미지/PDF 저장용 라이브러리 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
